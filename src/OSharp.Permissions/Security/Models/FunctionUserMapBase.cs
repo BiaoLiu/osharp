@@ -7,11 +7,10 @@
 //  <last-date>2015-08-03 19:33</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-
 using Microsoft.AspNet.Identity;
 
 using OSharp.Core.Data;
+using OSharp.Core.Identity.Models;
 
 
 namespace OSharp.Core.Security.Models
@@ -26,8 +25,8 @@ namespace OSharp.Core.Security.Models
     /// <typeparam name="TUserKey">用户编号类型</typeparam>
     public abstract class FunctionUserMapBase<TKey, TFunction, TFunctionKey, TUser, TUserKey>
         : EntityBase<TKey>, IFunctionUserMap<TKey, TFunction, TFunctionKey, TUser, TUserKey>
-        where TFunction : IFunction, IEntity<TFunctionKey>
-        where TUser : IUser<TUserKey>, IEntity<TUserKey>
+        where TFunction : FunctionBase<TFunctionKey>
+        where TUser : UserBase<TUserKey>
     {
         /// <summary>
         /// 获取或设置 功能信息

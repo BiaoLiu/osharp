@@ -10,8 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 using OSharp.Core.Data;
@@ -34,6 +32,9 @@ namespace OSharp.Core.Identity
         where TUserRoleMapInputDto : UserRoleMapBaseInputDto<TUserRoleMapKey, TUserKey, TRoleKey>
         where TRole : RoleBase<TRoleKey>
         where TUser : UserBase<TUserKey>
+        where TUserRoleMapKey : IEquatable<TUserRoleMapKey>
+        where TUserKey : IEquatable<TUserKey>
+        where TRoleKey : IEquatable<TRoleKey>
     {
         /// <summary>
         /// 获取或设置 用户信息仓储对象
@@ -148,8 +149,8 @@ namespace OSharp.Core.Identity
         /// <returns>有效的角色编号集合</returns>
         public Task<IList<TRoleKey>> GetRoleIdsAsync(TUserKey userId)
         {
-            IList<TRoleKey> ids = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId))
-                .Unexpired().Unlocked().Select(m => m.Role.Id).ToList();
+            IList<TRoleKey> ids = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && !m.IsLocked)
+                .Unexpired<TUserRoleMap, TUserRoleMapKey>().Select(m => m.Role.Id).ToList();
             return Task.FromResult(ids);
         }
 
@@ -160,8 +161,8 @@ namespace OSharp.Core.Identity
         /// <returns>有效的角色名称集合</returns>
         public Task<IList<string>> GetRolesAsync(TUserKey userId)
         {
-            IList<string> names = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId))
-                .Unexpired().Unlocked().Select(m => m.Role.Name).ToList();
+            IList<string> names = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && !m.IsLocked)
+                .Unexpired<TUserRoleMap, TUserRoleMapKey>().Select(m => m.Role.Name).ToList();
             return Task.FromResult(names);
         }
 
@@ -173,8 +174,8 @@ namespace OSharp.Core.Identity
         /// <returns>是否拥有</returns>
         public Task<bool> IsInRoleAsync(TUserKey userId, TRoleKey roleId)
         {
-            bool exist = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && m.Role.Id.Equals(roleId))
-                .Unexpired().Unlocked().Any();
+            bool exist = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && m.Role.Id.Equals(roleId) && !m.IsLocked)
+                .Unexpired<TUserRoleMap, TUserRoleMapKey>().Any();
             return Task.FromResult(exist);
         }
 
@@ -186,8 +187,8 @@ namespace OSharp.Core.Identity
         /// <returns>是否拥有</returns>
         public Task<bool> IsInRoleAsync(TUserKey userId, string roleName)
         {
-            bool exist = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && m.Role.Name.Equals(roleName))
-                .Unexpired().Unlocked().Any();
+            bool exist = UserRoleMapRepository.Entities.Where(m => m.User.Id.Equals(userId) && m.Role.Name.Equals(roleName) && !m.IsLocked)
+                .Unexpired<TUserRoleMap, TUserRoleMapKey>().Any();
             return Task.FromResult(exist);
         }
     }

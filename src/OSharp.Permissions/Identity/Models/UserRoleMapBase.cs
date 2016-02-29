@@ -7,12 +7,6 @@
 //  <last-date>2015-09-13 17:25</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Microsoft.AspNet.Identity;
 
 using OSharp.Core.Data;
@@ -32,14 +26,14 @@ namespace OSharp.Core.Identity.Models
         : ExpirableBase<TKey>,
         IUserRoleMap<TKey, TUser, TUserKey, TRole, TRoleKey>,
         ILockable
-        where TUser : IUser<TUserKey>
-        where TRole : IRole<TRoleKey>
+        where TUser : UserBase<TUserKey>
+        where TRole : RoleBase<TRoleKey>
     {
         /// <summary>
         /// 获取或设置 是否锁定
         /// </summary>
         public bool IsLocked { get; set; }
-        
+
         /// <summary>
         /// 获取或设置 用户信息
         /// </summary>

@@ -12,7 +12,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-using OSharp.Core.Reflection;
 using OSharp.Core.Security;
 using OSharp.Utility;
 using OSharp.Utility.Extensions;
@@ -71,6 +70,10 @@ namespace OSharp.Web.Mvc.Initialize
             }
 
             FunctionType functionType = FunctionType.Anonymouse;
+            if (method.DeclaringType.HasAttribute<AuthorizeAttribute>())
+            {
+                functionType = FunctionType.Logined;
+            }
             if (method.HasAttribute<AllowAnonymousAttribute>(true))
             {
                 functionType = FunctionType.Anonymouse;

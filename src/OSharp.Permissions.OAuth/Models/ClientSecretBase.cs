@@ -7,12 +7,7 @@
 //  <last-date>2015-10-31 15:45</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using OSharp.Core.Data;
 
@@ -22,7 +17,8 @@ namespace OSharp.Core.Security.Models
     /// <summary>
     /// 客户端密钥信息基类
     /// </summary>
-    public abstract class ClientSecretBase<TKey, TClient> : ExpirableBase<TKey>, IClientSecret<TKey>
+    public abstract class ClientSecretBase<TKey, TClient, TClientKey> : ExpirableBase<TKey>, IClientSecret<TKey>
+        where TClient : IClient<TClientKey>
     {
         /// <summary>
         /// 获取或设置 密钥值

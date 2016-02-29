@@ -6,12 +6,6 @@
 //  <last-date>2015-06-25 13:17</last-date>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Microsoft.AspNet.Identity;
 
 using OSharp.Core.Data;
@@ -26,7 +20,7 @@ namespace OSharp.Core.Identity.Models
     /// <typeparam name="TUser">用户类型</typeparam>
     /// <typeparam name="TUserKey">用户编号类型</typeparam>
     public abstract class UserClaimBase<TKey, TUser, TUserKey> : EntityBase<TKey>, IUserClaim<TKey, TUser, TUserKey>
-        where TUser : IUser<TUserKey>
+        where TUser : UserBase<TUserKey>
     {
         /// <summary>
         /// 获取或设置 摘要类型
